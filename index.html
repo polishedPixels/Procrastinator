@@ -8,42 +8,71 @@
 	<script>
 		var Names = [];//String
 		var Descs = [];//String
-		var Times = [];//Date
+		var Done = [];//Boolean
 		var priority = [];//Int (1 -10)
 
-		
-		if(localStorage.getItem("TaskNum") == null){
-			taskIndex = 0;
-		}else{
-			taskIndex = localStorage.getItem("TaskNum");
-		}
+
+		var taskIndex;
+		var curSelectedTask =0;
 
 		//alert(taskIndex);
+		function  getLocalData(){
+			if(localStorage.getItem("TaskNum") == null){
+				taskIndex = 0;
+			}else{
+				taskIndex = localStorage.getItem("TaskNum");
+			}
+			for(var i = 0; i < taskIndex; i++){
 
-		for(var i = 0; i < taskIndex; i++){
-			
 				Names[i] = localStorage.getItem("name"+i);
 				Descs[i] = localStorage.getItem("desc"+i);
 				priority[i] = localStorage.getItem("prio"+i);
+				Done[i] = localStorage.getItem("done"+i);
+			}
 		}
-		alert(localStorage.getItem("name"+0))
-
-
-		var curTime = new Date();
-
 		function deleteTasks(){
 			localStorage.clear();
 			location.reload();
 		}
+		function updateList(){
+			$(".toDoList").empty();
+			Names[i] = localStorage.getItem("name"+i);
+			for(var i = taskIndex-1;i >= 0;i--){
+
+				$(".toDoList").append("<li ><button class = 'tasks' name = hello>"+Names[i]+"</button></li>");
+			}
+		}
+		function priorityUpdate(){
+			for(var i = 0; i < taskIndex; i++){
+				for(var k = i+1; i <= taskIndex; i++){
+					
+				}
+
+		}
+		function GetandUpdate(){
+			getLocalData();
+			updateList();
+		}
+
+		getLocalData();
+		updateList();
 
 		$(document).ready(function() {
+
+			$(".refreshLists").click(function(){
+				updateList();
+			});
+
+			$("#doneButton").click(function(){
+
+			});
 			$(".deleteTasksButton").click(function(){
 				deleteTasks();
 			});
 			$(".addTaskButton").click(function(){
 				Names[taskIndex] = $(".addTaskName").val();
 				Descs[taskIndex] = $(".addTaskDesc").val();
-
+				Done[taskIndex] = false;
 
 				
 				if($(".addTaskPrio").val() >10){
@@ -59,16 +88,19 @@
 					var name = "name"+i;
 					var decs = "decs"+i;
 					var prio = "prio"+i;
+					var done = "done"+i;
 					
 
 					localStorage.setItem(name,Names[i]);
 					localStorage.setItem(decs,Descs[i]);
 					localStorage.setItem(prio,priority[i]);
+					localStorage.setItem(done,Done[i]);
 					localStorage.setItem("TaskNum",taskIndex);
 				};
-
-				
+				updateList();
 			});
+			alert($('.tasks').text());
+
 		});
 
 		
@@ -76,63 +108,45 @@
 
 	</script>
 </head>
-<body>
+<body onload="GetandUpdate();">
 
-		<button class="deleteTasksButton">Delete Tasks</button>
-		
-		<div class="left">
-			<h3>Details:</h3>
-			<h4 class="doubled"><em>Due:</em></h4>
-			<h4 class="doubled"><em>Description:</em></h4>
+	<button class="deleteTasksButton">Delete Tasks</button>
+	<button class="refreshList"> RefreshLists</button>
+
+	<div class="left">
+		<h3>Details:</h3>
+		<h4 class="doubled"><em>Due:</em></h4>
+		<h4 class="doubled"><em>Description:</em></h4>
+
+		<button class="doubled" id= "doneButton">DONE!</button>
+	</div>
+
+	<div class="right">
+		<h3 id="rightleftheader"> ToDo:</h3>
+		<h3 id="rightleftheader">Done:</h3>			
+		<div class="rightbottomleft" >
+			<ol class="toDoList">
+
+
+			</ol>
+
 		</div>
-		
-		<div class="right">
-			<h3 id="rightleftheader"> ToDo:</h3>
-			<h3 id="rightleftheader">Done:</h3>			
-			<div class="rightbottomleft">
-				<ul>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					
 
-				</ul>
+		<div class="rightbottomright">
+			<ul class="doneList">
 
-			</div>
-
-			<div class="rightbottomright">
-				<ul>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					<li></li>
-					
-
-				</ul>
+			</ul>
 			
 		</div>
-	<div id="header">
+		<div id="header">
 			<p id="name">Add Task:</p> <button class="addTaskButton">Add Task</button>
 			<form id="intext"><input type="text" name="inputtext" class="addTaskName"></form>
 			<p id="description">Description:</p>
 			<div>
-			<textarea rows="4" cols="50" class="addTaskDesc">
-				
-			</textarea>
-			<p id="priority">Priority:</p>
-			<form id="inputpriority"><input type="text" name="inputpriority" class="addTaskPrio"></form>
-	</body>
-</html>
+				<textarea rows="4" cols="50" class="addTaskDesc">
+
+				</textarea>
+				<p id="priority">Priority:</p>
+				<form id="inputpriority"><input type="text" name="inputpriority" class="addTaskPrio"></form>
+			</body>
+			</html>
